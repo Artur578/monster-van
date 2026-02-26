@@ -24,3 +24,69 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+
+
+.mini-conveyor {
+  display: flex;
+  width: max-content;
+  animation: mini-conveyor-move 14s linear infinite;
+  transform: translateZ(0);
+  opacity: 1;
+}
+
+@keyframes mini-conveyor-move {
+  from { transform: translateX(0); }
+  to { transform: translateX(-1000px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mini-conveyor {
+    animation: none;
+  }
+}
+
+/* Base movement: right -> left */
+.truck-rtl {
+  left: 100%;
+  will-change: transform;
+  animation-name: truck-right-to-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Two instances with offset so there is no dead-time */
+.truck-rtl-a {
+  animation-duration: 18s;
+  animation-delay: 0s;
+}
+
+.truck-rtl-b {
+  animation-duration: 18s;
+  animation-delay: -9s; /* half cycle offset = always one truck visible */
+}
+
+@keyframes truck-right-to-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-2200px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truck-rtl,
+  .truck-rtl-a,
+  .truck-rtl-b {
+    animation: none;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
