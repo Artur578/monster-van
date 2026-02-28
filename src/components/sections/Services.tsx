@@ -14,7 +14,7 @@ const services = [
   },
   {
     title: "Cobertura Geográfica",
-    desc: "Facilitamos la distribución en la república mexicana de acuerdo a las necesidades del cliente.(aplica algunas restricciones)", 
+    desc: "Facilitamos la distribución en la república mexicana de acuerdo a las necesidades del cliente (aplica algunas restricciones).", 
     icon: MapPin,
     image: "/images/g.png",
     accent: "bg-red-600",
