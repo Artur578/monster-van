@@ -111,7 +111,7 @@ export function Hero() {
       <div className="relative mx-auto max-w-6xl px-4 pb-10">
         <div className="grid gap-6 border-t border-white/10 pt-8 md:grid-cols-4">
           <Stat value="3.5t" label="Capacidad máx." />
-          <Stat value="GRAN" label="Disponibilidad" />
+          <Stat value="Gran" label="Disponibilidad" />
           
           <Stat value="GPS" label="Rastreo en vivo" />
         </div>
