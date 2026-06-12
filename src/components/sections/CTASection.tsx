@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import { QuoteModal } from "@/components/QuoteModal";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 export function CTASection() {
   const [openQuote, setOpenQuote] = useState(false);
+  const { content } = useSiteContent();
+
+  const whatsapp = content.general.whatsapp.replace(/\D/g, "");
 
   return (
     <>
@@ -25,12 +29,11 @@ export function CTASection() {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
 
             <h3 className="text-3xl font-extrabold tracking-tight text-white md:text-5xl">
-              ¿Listo para mover tu mercancía?
+              {content.cta.title}
             </h3>
 
             <p className="mx-auto mt-4 max-w-2xl text-base text-white/75 md:text-lg">
-              Únete a los clientes que ya confían en Monster Van para sus
-              operaciones logísticas.
+              {content.cta.description}
             </p>
 
             {/* ✅ BOTÓN QUE ABRE EL MODAL */}
@@ -38,9 +41,9 @@ export function CTASection() {
               <button
                 type="button"
                 onClick={() => setOpenQuote(true)}
-                className="inline-flex items-center justify-center gap-3 rounded-full bg-red-600 px-8 py-4 text-base font-extrabold text-white shadow-[0_18px_60px_rgba(239,68,68,0.30)] transition hover:bg-red-500 hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-3 rounded-full bg-red-600 px-8 py-4 text-base font-extrabold text-white shadow-[0_18px_60px_rgba(239,68,68,0.30)] transition hover:scale-[1.02] hover:bg-red-500"
               >
-                Solicitar Cotización
+                {content.cta.buttonText}
                 <span className="text-xl leading-none">→</span>
               </button>
             </div>
@@ -54,7 +57,7 @@ export function CTASection() {
       <QuoteModal
         open={openQuote}
         onClose={() => setOpenQuote(false)}
-        whatsappPhoneE164NoPlus="524691138533" // tu número de prueba
+        whatsappPhoneE164NoPlus={whatsapp}
       />
     </>
   );

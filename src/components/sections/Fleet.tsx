@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import React, { useMemo, useState } from "react";
 import { QuoteModal } from "../QuoteModal";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 function cn(...classes: Array<string | false | undefined | null>) {
   return classes.filter(Boolean).join(" ");
@@ -96,6 +96,69 @@ export function Fleet() {
   const [activeEpp, setActiveEpp] = useState<EppKey>("lentes");
   const [activeSafety, setActiveSafety] = useState<SafetyKey>("torreta");
 
+  const { content } = useSiteContent();
+
+  const whatsapp = content.general.whatsapp.replace(/\D/g, "");
+
+  const fleetDescription =
+    content.fleet.description &&
+    content.fleet.description !==
+      "Contamos con unidades preparadas para ofrecer transporte seguro, eficiente y profesional."
+      ? content.fleet.description
+      : "Unidades modernas equipadas con estándares de seguridad y operación profesional para entregas confiables.";
+
+  const vehicleOneTitle =
+    content.fleet.vehicleOneTitle &&
+    content.fleet.vehicleOneTitle !== "Camioneta 1.3t"
+      ? content.fleet.vehicleOneTitle
+      : "Caady — 1.3 Toneladas";
+
+  const vehicleOneSubtitle =
+    content.fleet.vehicleOneDescription &&
+    content.fleet.vehicleOneDescription !==
+      "Ideal para entregas ágiles, seguras y eficientes en rutas locales o nacionales."
+      ? content.fleet.vehicleOneDescription
+      : "Ideal para zona urbana y paquetería mediana.";
+
+  const vehicleTwoTitle =
+    content.fleet.vehicleTwoTitle &&
+    content.fleet.vehicleTwoTitle !== "Plataforma"
+      ? content.fleet.vehicleTwoTitle
+      : "Plataforma — 3.5 Toneladas";
+
+  const vehicleTwoSubtitle =
+    content.fleet.vehicleTwoDescription &&
+    content.fleet.vehicleTwoDescription !==
+      "Unidad versátil para traslado de mercancías que requieren mayor espacio o maniobra."
+      ? content.fleet.vehicleTwoDescription
+      : "Mayor capacidad para cargas pesadas y rutas regionales.";
+
+  const safetyTitle =
+    content.fleet.safetyTitle &&
+    content.fleet.safetyTitle !== "Seguridad en operación"
+      ? content.fleet.safetyTitle
+      : "Equipo de seguridad";
+
+  const safetyDescription =
+    content.fleet.safetyDescription &&
+    content.fleet.safetyDescription !==
+      "Nuestras unidades cuentan con equipo y medidas para una operación confiable."
+      ? content.fleet.safetyDescription
+      : "Los vehículos cuentan con equipo requerido. Selecciona un elemento para ver detalle.";
+
+  const eppTitle =
+    content.fleet.eppTitle &&
+    content.fleet.eppTitle !== "Equipo de protección personal"
+      ? content.fleet.eppTitle
+      : "Equipo EPP completo";
+
+  const eppDescription =
+    content.fleet.eppDescription &&
+    content.fleet.eppDescription !==
+      "Nuestro personal trabaja con equipo de protección para mantener operaciones seguras."
+      ? content.fleet.eppDescription
+      : "El personal cuenta con EPP requerido. Selecciona un elemento para ver detalle.";
+
   const eppList = useMemo(
     () => (Object.keys(EPP) as EppKey[]).map((k) => ({ key: k, ...EPP[k] })),
     []
@@ -103,7 +166,10 @@ export function Fleet() {
 
   const safetyList = useMemo(
     () =>
-      (Object.keys(SAFETY) as SafetyKey[]).map((k) => ({ key: k, ...SAFETY[k] })),
+      (Object.keys(SAFETY) as SafetyKey[]).map((k) => ({
+        key: k,
+        ...SAFETY[k],
+      })),
     []
   );
 
@@ -113,14 +179,13 @@ export function Fleet() {
         {/* Header */}
         <div className="text-center">
           <p className="text-xs tracking-[0.28em] text-blue-300/80">
-            NUESTRA FLOTILLA
+            {content.fleet.eyebrow}
           </p>
           <h2 className="mt-3 text-4xl font-extrabold text-white md:text-5xl">
-            Flotilla Vehicular
+            {content.fleet.title}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-white/70">
-            Unidades modernas equipadas con estándares de seguridad y operación
-            profesional para entregas confiables.
+            {fleetDescription}
           </p>
           <div className="mx-auto mt-6 h-[3px] w-14 rounded-full bg-gradient-to-r from-red-500/80 via-blue-500/70 to-red-500/80" />
         </div>
@@ -135,10 +200,10 @@ export function Fleet() {
             <div className="pointer-events-none absolute -top-24 left-8 h-44 w-44 rounded-full bg-red-500/15 blur-3xl" />
 
             <VehicleBlock
-              title="Caady — 1.3 Toneladas"
+              title={vehicleOneTitle}
               tag="Urbano"
-              subtitle="Ideal para zona urbana y paquetería mediana."
-              imageSrc="/images/caady1.3.webp"
+              subtitle={vehicleOneSubtitle}
+              imageSrc={content.fleet.vehicleOneImage}
               bullets={[
                 "Entregas rápidas y maniobra ágil",
                 "Carga segura y puntual",
@@ -149,10 +214,10 @@ export function Fleet() {
             <div className="my-6 h-px w-full bg-white/10" />
 
             <VehicleBlock
-              title="Plataforma — 3.5 Toneladas"
+              title={vehicleTwoTitle}
               tag="Regional"
-              subtitle="Mayor capacidad para cargas pesadas y rutas regionales."
-              imageSrc="/images/plataforma.webp"
+              subtitle={vehicleTwoSubtitle}
+              imageSrc={content.fleet.vehicleTwoImage}
               bullets={[
                 "Mayor capacidad por viaje",
                 "Operación programada y urgente",
@@ -174,7 +239,7 @@ export function Fleet() {
                   SEGURIDAD
                 </p>
                 <h3 className="mt-2 text-xl font-extrabold text-white">
-                  Equipo de seguridad
+                  {safetyTitle}
                 </h3>
               </div>
 
@@ -183,10 +248,7 @@ export function Fleet() {
               </div>
             </div>
 
-            <p className="mt-3 text-sm text-white/70">
-              Los vehículos cuentan con equipo requerido. Selecciona un elemento
-              para ver detalle.
-            </p>
+            <p className="mt-3 text-sm text-white/70">{safetyDescription}</p>
 
             <div className="mt-6">
               {/* Imagen FULL WIDTH + hotspots */}
@@ -195,18 +257,17 @@ export function Fleet() {
 
                 {/* Ajusta alturas aquí si quieres el camión más grande */}
                 <div className="relative h-[280px] w-full sm:h-[320px]">
-                  <Image
-                    src="/images/result.png"
+                  <img
+                    src={content.fleet.safetyImage}
                     alt="Vehículo y equipo de seguridad"
-                    fill
-                    priority
-                    className="object-contain"
+                    className="h-full w-full object-contain"
                   />
 
                   {/* Hotspots */}
                   {(Object.keys(SAFETY) as SafetyKey[]).map((k) => {
                     const d = SAFETY[k].dot;
                     const isActive = k === activeSafety;
+
                     return (
                       <button
                         key={k}
@@ -233,6 +294,7 @@ export function Fleet() {
                             isActive ? "bg-red-500" : "bg-white/75"
                           )}
                         />
+
                         {isActive && (
                           <span className="absolute inset-0 rounded-full animate-ping bg-red-500/25" />
                         )}
@@ -257,6 +319,7 @@ export function Fleet() {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 {safetyList.map((item) => {
                   const isActive = item.key === activeSafety;
+
                   return (
                     <button
                       key={item.key}
@@ -301,7 +364,7 @@ export function Fleet() {
                   SEGURIDAD
                 </p>
                 <h3 className="mt-2 text-xl font-extrabold text-white">
-                  Equipo EPP completo
+                  {eppTitle}
                 </h3>
               </div>
 
@@ -310,10 +373,7 @@ export function Fleet() {
               </div>
             </div>
 
-            <p className="mt-3 text-sm text-white/70">
-              El personal cuenta con EPP requerido. Selecciona un elemento para
-              ver detalle.
-            </p>
+            <p className="mt-3 text-sm text-white/70">{eppDescription}</p>
 
             <div className="mt-6 grid gap-4 md:grid-cols-[1.25fr_1fr]">
               {/* Imagen + hotspots */}
@@ -324,12 +384,10 @@ export function Fleet() {
                   <div className="relative h-[520px] w-full sm:h-[560px]">
                     {/* recorte/zoom */}
                     <div className="absolute inset-0 overflow-hidden">
-                      <Image
-                        src="/images/epp-worker.webp"
+                      <img
+                        src={content.fleet.eppImage}
                         alt="Personal con EPP"
-                        fill
-                        priority
-                        className="object-cover"
+                        className="h-full w-full object-cover"
                         style={{
                           objectPosition: "50% 35%",
                           transform: "scale(1.25)",
@@ -341,6 +399,7 @@ export function Fleet() {
                     {(Object.keys(EPP) as EppKey[]).map((k) => {
                       const d = EPP[k].dot;
                       const isActive = k === activeEpp;
+
                       return (
                         <button
                           key={k}
@@ -361,15 +420,18 @@ export function Fleet() {
                                 : "bg-white/10 opacity-60"
                             )}
                           />
+
                           <span
                             className={cn(
                               "relative block h-3.5 w-3.5 rounded-full shadow-[0_6px_20px_rgba(0,0,0,0.6)]",
                               isActive ? "bg-blue-400" : "bg-white/75"
                             )}
                           />
+
                           {isActive && (
                             <span className="absolute inset-0 rounded-full animate-ping bg-blue-500/25" />
                           )}
+
                           <span
                             className={cn(
                               "pointer-events-none absolute left-1/2 top-full z-10 mt-3 w-max -translate-x-1/2",
@@ -392,6 +454,7 @@ export function Fleet() {
                 <div className="grid grid-cols-2 gap-2">
                   {eppList.map((item) => {
                     const isActive = item.key === activeEpp;
+
                     return (
                       <button
                         key={item.key}
@@ -414,24 +477,33 @@ export function Fleet() {
                   <div className="text-sm font-extrabold text-white">
                     {EPP[activeEpp].title}
                   </div>
-                  <p className="mt-1 text-sm text-white/70">{EPP[activeEpp].desc}</p>
+                  <p className="mt-1 text-sm text-white/70">
+                    {EPP[activeEpp].desc}
+                  </p>
                   <div className="mt-3 h-[2px] w-14 rounded-full bg-gradient-to-r from-red-500/70 via-blue-500/60 to-red-500/70" />
                 </div>
-
-                
               </div>
             </div>
           </div>
         </div>
 
         {/* CTA */}
-        <FleetCTAButtons />
+        <FleetCTAButtons
+          whatsapp={whatsapp}
+          buttonText={content.cta.buttonText}
+        />
       </div>
     </section>
   );
 }
 
-export function FleetCTAButtons() {
+export function FleetCTAButtons({
+  whatsapp,
+  buttonText,
+}: {
+  whatsapp: string;
+  buttonText: string;
+}) {
   const [openQuote, setOpenQuote] = useState(false);
 
   return (
@@ -443,7 +515,7 @@ export function FleetCTAButtons() {
           onClick={() => setOpenQuote(true)}
           className="rounded-full bg-red-600 px-6 py-3 text-sm font-extrabold text-white shadow-[0_10px_30px_rgba(239,68,68,0.30)] transition hover:bg-red-500"
         >
-          Solicitar Cotización →
+          {buttonText} →
         </button>
 
         {/* BOTÓN NORMAL */}
@@ -459,7 +531,7 @@ export function FleetCTAButtons() {
       <QuoteModal
         open={openQuote}
         onClose={() => setOpenQuote(false)}
-        whatsappPhoneE164NoPlus="524691138533"
+        whatsappPhoneE164NoPlus={whatsapp}
       />
     </>
   );
@@ -498,11 +570,10 @@ function VehicleBlock({
       <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5">
         {/* Ajusta alturas aquí si quieres más grande */}
         <div className="relative h-40 w-full sm:h-44">
-          <Image
+          <img
             src={imageSrc}
             alt={title}
-            fill
-            className="object-cover"
+            className="h-full w-full object-cover"
             style={{ objectPosition: "50% 55%" }}
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />

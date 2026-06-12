@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
-import { QuoteModal } from "@/components/QuoteModal"; // ✅ IMPORTA EL MODAL
+import { QuoteModal } from "@/components/QuoteModal";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 export function Footer() {
   const [openQuote, setOpenQuote] = useState(false);
+  const { content } = useSiteContent();
+
+  const whatsapp = content.general.whatsapp.replace(/\D/g, "");
 
   return (
     <>
@@ -20,12 +23,10 @@ export function Footer() {
                 <div className="flex items-center gap-3">
                   {/* ✅ Slot fijo (no cambia posición), logo escalado */}
                   <div className="relative h-11 w-11 overflow-visible">
-                    <Image
-                      src="/images/logo2.png"
-                      alt="Monster Van"
-                      fill
-                      priority
-                      className="object-contain origin-left scale-[2.0]"
+                    <img
+                      src={content.general.logo}
+                      alt={content.general.companyName}
+                      className="h-11 w-11 origin-left scale-[2.0] object-contain"
                     />
                   </div>
 
@@ -38,43 +39,45 @@ export function Footer() {
                 </div>
 
                 <p className="mt-4 text-sm leading-relaxed text-white/65">
-                  Transporte y logística nacional con operación segura, puntual y
-                  rastreable.
+                  {content.footer.description}
                 </p>
 
                 <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-white/70">
                   <span className="h-2 w-2 rounded-full bg-blue-400/80" />
-                 
+                  {content.general.companyName}
                 </div>
               </div>
 
               {/* Links */}
               <div>
-                <div className="text-sm font-extrabold text-white">Secciones</div>
+                <div className="text-sm font-extrabold text-white">
+                  Secciones
+                </div>
+
                 <ul className="mt-4 space-y-2 text-sm text-white/70">
                   <li>
                     <a className="hover:text-white" href="#inicio">
-                      Inicio
+                      {content.nav.inicio}
                     </a>
                   </li>
                   <li>
                     <a className="hover:text-white" href="#nosotros">
-                      Nosotros
+                      {content.nav.nosotros}
                     </a>
                   </li>
                   <li>
                     <a className="hover:text-white" href="#servicios">
-                      Servicios
+                      {content.nav.servicios}
                     </a>
                   </li>
                   <li>
                     <a className="hover:text-white" href="#flotilla">
-                      Flotilla
+                      {content.nav.flotilla}
                     </a>
                   </li>
                   <li>
-                    <a className="hover:text-white" href="#contacto">
-                      Contacto
+                    <a className="hover:text-white" href="#footer">
+                      {content.nav.contacto}
                     </a>
                   </li>
                 </ul>
@@ -82,32 +85,37 @@ export function Footer() {
 
               {/* Contact */}
               <div>
-                <div className="text-sm font-extrabold text-white">Contacto</div>
+                <div className="text-sm font-extrabold text-white">
+                  Contacto
+                </div>
 
                 <ul className="mt-4 space-y-3 text-sm text-white/70">
                   <li className="flex gap-3">
                     <span className="mt-0.5 text-white/70">
                       <Phone className="h-4 w-4" />
                     </span>
-                    <span>(+52) 462 236 3138</span>
+                    <span>{content.general.phone}</span>
                   </li>
+
                   <li className="flex gap-3">
                     <span className="mt-0.5 text-white/70">
                       <Phone className="h-4 w-4" />
                     </span>
-                    <span>(+52) 462 250 7585</span>
+                    <span>{formatWhatsAppPhone(content.general.whatsapp)}</span>
                   </li>
+
                   <li className="flex gap-3">
                     <span className="mt-0.5 text-white/70">
                       <Mail className="h-4 w-4" />
                     </span>
-                    <span>monstervanmx@gmail.com</span>
+                    <span>{content.general.email}</span>
                   </li>
+
                   <li className="flex gap-3">
                     <span className="mt-0.5 text-white/70">
                       <MapPin className="h-4 w-4" />
                     </span>
-                    <span>México</span>
+                    <span>{content.general.address}</span>
                   </li>
                 </ul>
 
@@ -124,6 +132,7 @@ export function Footer() {
               {/* Legal */}
               <div>
                 <div className="text-sm font-extrabold text-white">Legal</div>
+
                 <ul className="mt-4 space-y-2 text-sm text-white/70">
                   <li>
                     <a className="hover:text-white" href="#">
@@ -154,8 +163,8 @@ export function Footer() {
             {/* Bottom bar */}
             <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 md:flex-row md:items-center md:justify-between">
               <div className="text-xs text-white/55">
-                © {new Date().getFullYear()} Monster Van. Todos los derechos
-                reservados.
+                © {new Date().getFullYear()} {content.general.companyName}.{" "}
+                {content.footer.rights}
               </div>
 
               <div className="flex items-center gap-3">
@@ -163,7 +172,7 @@ export function Footer() {
                   href="#inicio"
                   className="rounded-full border border-white/12 bg-white/5 px-4 py-2 text-xs font-semibold text-white/70 transition hover:bg-white/10 hover:text-white"
                 >
-                  Volver arriba ↑
+                  {content.footer.backToTop}
                 </a>
               </div>
             </div>
@@ -175,8 +184,18 @@ export function Footer() {
       <QuoteModal
         open={openQuote}
         onClose={() => setOpenQuote(false)}
-        whatsappPhoneE164NoPlus="524622363138" // ✅ tu número de prueba (sin +)
+        whatsappPhoneE164NoPlus={whatsapp}
       />
     </>
   );
+}
+
+function formatWhatsAppPhone(value: string) {
+  const clean = value.replace(/\D/g, "");
+
+  if (clean.length === 12 && clean.startsWith("52")) {
+    return `(+52) ${clean.slice(2, 5)} ${clean.slice(5, 8)} ${clean.slice(8)}`;
+  }
+
+  return value;
 }
