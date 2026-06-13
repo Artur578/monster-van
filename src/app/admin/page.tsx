@@ -8,7 +8,14 @@ import { defaultContent, type SiteContent } from "@/config/defaultContent";
 import { supabase } from "@/lib/supabaseClient";
 import { getSiteContent } from "@/lib/siteContent";
 
-const ADMIN_UID = "fe96d864-d1fe-48e6-917b-651b9d906701";
+const ADMIN_UIDS = [
+  "fe96d864-d1fe-48e6-917b-651b9d906701",
+  "5b40db88-bf96-4523-a290-182ab8406ebc",
+];
+
+function isAdminUser(userId: string) {
+  return ADMIN_UIDS.includes(userId);
+}
 
 const DEFAULT_SERVICE_ITEMS = [
   {
@@ -103,7 +110,7 @@ export default function AdminPage() {
       return;
     }
     setUserEmail(user.email ?? null);
-    setIsAdmin(user.id === ADMIN_UID);
+    setIsAdmin(isAdminUser(user.id));
     setLoading(false);
   }
 
@@ -133,7 +140,7 @@ export default function AdminPage() {
       setLoggingIn(false);
       return;
     }
-    if (data.user.id !== ADMIN_UID) {
+    if (!isAdminUser(data.user.id)) {
       setMessage("Este usuario no tiene permisos de administrador.");
       await supabase.auth.signOut();
       setLoggingIn(false);
